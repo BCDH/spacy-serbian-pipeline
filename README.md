@@ -2,6 +2,10 @@
 
 We're just starting with this project.
 
+## How to use with Spacy?
+
+... 
+
 ## Data files
 
 ### Lemmatizer data
