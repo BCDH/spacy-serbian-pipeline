@@ -21,10 +21,11 @@ _exc = {
 }
 
 # grouping
+# test to see difference from default sr exceptions
 
 for exc_data in [
     {ORTH: "usw.", LEMMA: "und so weiter"},
-    {ORTH: "итд.", LEMMA: "и тако даље"},
+    {ORTH: "итд.", LEMMA: "и тако даљеeeeeeee"},
 ]:
     _exc[exc_data[ORTH]] = [exc_data]
 
