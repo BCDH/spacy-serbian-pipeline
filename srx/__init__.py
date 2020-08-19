@@ -16,7 +16,7 @@ from spacy.util import update_exc, add_lookups
 class SerbianDefaults(Language.Defaults):
     lex_attr_getters = dict(Language.Defaults.lex_attr_getters)
     lex_attr_getters.update(LEX_ATTRS)
-    lex_attr_getters[LANG] = lambda text: "srx"
+    lex_attr_getters[LANG] = lambda text: "sr"
     lex_attr_getters[NORM] = add_lookups(
         Language.Defaults.lex_attr_getters[NORM], BASE_NORMS, NORM_EXCEPTIONS
     )
@@ -25,7 +25,7 @@ class SerbianDefaults(Language.Defaults):
 
 
 class SerbianLanguage(Language):
-    lang = "srx"
+    lang = "sr"
     Defaults = SerbianDefaults
 
 

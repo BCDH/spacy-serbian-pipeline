@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name="srx",
+    name="sr",
     entry_points={
-        "spacy_languages": ["srx = srx:SerbianLanguage"],
+        "spacy_languages": ["sr = sr:SerbianLanguage"],
     }
 )
