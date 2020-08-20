@@ -26,6 +26,7 @@ _exc = {
 for exc_data in [
     {ORTH: "usw.", LEMMA: "und so weiter"},
     {ORTH: "итд.", LEMMA: "и тако даљеeeeeeee"},
+    {ORTH: "БЕМУС-а", LEMMA: "БЕМУС"},
 ]:
     _exc[exc_data[ORTH]] = [exc_data]
 
@@ -34,7 +35,8 @@ for exc_data in [
 
 for orth in [
     "vs.",
-    "wiss."
+    "wiss.",
+    "БЕМУС-а"
 ]:
     _exc[orth] = [{ORTH: orth}]
 
