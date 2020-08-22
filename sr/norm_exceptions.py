@@ -1,24 +1,15 @@
 # coding: utf8
 from __future__ import unicode_literals
 
-# TT: commented out
-# I see no point in this type of lexical normalization
 # currently considering for Ekavian-Jekavian normalization
 
 _exc = {
-    # Slang
-    #"ћале": "отац",
-    #"кева": "мајка",
-    #"смор": "досада",
-    #"кец": "јединица",
-    #"тебра": "брат",
-    #"штребер": "ученик",
-    #"факс": "факултет",
-    #"профа": "професор",
-    #"бус": "аутобус",
-    #"пискарало": "службеник",
-    #"бакутанер": "бака",
-    #"џибер": "простак",
+    # jekavian to ekavian
+    "млијеко": "млеко",
+    "мјесто": "место",
+    "мјеста": "места",
+    "мијесити": "месити"
+
 }
 
 

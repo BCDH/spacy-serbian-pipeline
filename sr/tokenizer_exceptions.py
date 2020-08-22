@@ -5,6 +5,7 @@ from spacy.symbols import ORTH, LEMMA, NORM
 
 
 # just testing, based on German
+# This is NOT the actual tokenizer exceptions file we will use
 
 # splittting
 
@@ -25,8 +26,9 @@ _exc = {
 
 for exc_data in [
     {ORTH: "usw.", LEMMA: "und so weiter"},
-    {ORTH: "итд.", LEMMA: "и тако даљеeeeeeee"},
+    {ORTH: "итд.", LEMMA: "и тако даље"},
     {ORTH: "БЕМУС-а", LEMMA: "БЕМУС"},
+    {ORTH: "гимн.", LEMMA: "гимназија"}
 ]:
     _exc[exc_data[ORTH]] = [exc_data]
 
@@ -35,8 +37,7 @@ for exc_data in [
 
 for orth in [
     "vs.",
-    "wiss.",
-    "БЕМУС-а"
+    "wiss."
 ]:
     _exc[orth] = [{ORTH: orth}]
 
