@@ -3,3 +3,4 @@ __pycache__
 .DS_Store
 env
 spacy-lookups-data
+UD_Serbian-SET/
