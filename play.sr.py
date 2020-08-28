@@ -10,5 +10,6 @@ doc = nlp('Шта се дешава са скраћеницама типа нп�
 for token in doc:
     token_text = token.text
     token_lemma = token.lemma_
+    token_pos = token.pos_
     token_norm = token.norm_
-    print(f"{token_text:<20}{token_lemma:<15}{token_norm:<15}")
+    print(f"{token_text:<20}{token_pos:<15}{token_lemma:<15}{token_norm:<15}")

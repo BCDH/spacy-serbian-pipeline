@@ -9,7 +9,6 @@
 
 # Get spacy lookups data
 
-
 if command git clone https://github.com/explosion/spacy-lookups-data.git
 else
     cd spacy-lookups-data
@@ -27,17 +26,17 @@ cd ..
 # Use Serbian pipeline
 python3 setup.py develop
 
-
 # This won't be of any use for the time being because Serbian UD sets are not Cyrillic.
 # We will be training our own dataset.
 # # add data for tagger and parser
 # git clone https://github.com/UniversalDependencies/UD_Serbian-SET.git
-# mkdir serbian-json
-# python3 -m spacy convert UD_Serbian-SET/sr_set-ud-train.conllu  serbian-json
-# python3 -m spacy convert UD_Serbian-SET/sr_set-ud-dev.conllu  serbian-json
-# python3 -m spacy convert UD_Serbian-SET/sr_set-ud-test.conllu  serbian-json
+# converted UD datasets to Cyrillic; this is just for starters, we plan to do our own training data
+# mkdir training_data
+# python3 -m spacy convert UD_Serbian_Cyrl-SET/sr_set-ud-train.conllu  sr_training_data
+#python3 -m spacy convert UD_Serbian_Cyrl-SET/sr_set-ud-dev.conllu  sr_training_data
+#python3 -m spacy convert UD_Serbian_Cyrl-SET/sr_set-ud-test.conllu  sr_training_data
 # # train
 # mkdir models
-# python3 -m spacy train sr models/sr serbian-json/sr_set-ud-train.json serbian-json/sr_set-ud-dev.json -n 1
+#python3 -m spacy train sr models/sr sr_training_data/sr_set-ud-train.json sr_training_data/sr_set-ud-dev.json -n 1
 # # evaluate
-# python3 -m spacy evaluate models/sr/model-best serbian-json/sr_set-ud-test.json
+# python3 -m spacy evaluate models/sr/model-best sr_training_data/sr_set-ud-test.json
