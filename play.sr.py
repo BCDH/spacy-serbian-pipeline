@@ -11,9 +11,10 @@ doc = nlp('Епидемија коронавируса наметнула је �
 for token in doc:
     token_text = token.text
     token_lemma = token.lemma_
-    token_pos = token.pos_
+    token_tag = token.tag_
     token_norm = token.norm_
-    print(f"{token_text:<20}{token_pos:<15}{token_lemma:<15}{token_norm:<15}")
+    print(f"{token_text:<20}{token_tag:<15}{token_lemma:<15}{token_norm:<15}")
 
-# this doesn't work
-# all POS-es are X
+# for token.pos_ we'll need a tag map
+# https://spacy.io/usage/adding-languages#tag-map
+# conversion fro UD to json doesn't pick up the POS field 
