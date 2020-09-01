@@ -24,20 +24,6 @@ class SerbianDefaults(Language.Defaults):
     tokenizer_exceptions = update_exc(BASE_EXCEPTIONS, TOKENIZER_EXCEPTIONS)
     stop_words = STOP_WORDS
     tag_map = TAG_MAP
-    single_orth_variants = [
-        {"tags": ["$("], "variants": ["…", "..."]},
-        {"tags": ["$("], "variants": ["-", "—", "–", "--", "---", "——"]},
-    ]
-    paired_orth_variants = [
-        {
-            "tags": ["$("],
-            "variants": [("'", "'"), (",", "'"), ("‚", "‘"), ("›", "‹"), ("‹", "›")],
-        },
-        {
-            "tags": ["$("],
-            "variants": [("``", "''"), ('"', '"'), ("„", "“"), ("»", "«"), ("«", "»")],
-        },
-    ]
 
 
 class SerbianLanguage(Language):

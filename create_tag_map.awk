@@ -26,10 +26,10 @@ BEGIN {
       }
 
       if (NR != lines) {
-        print "\t\"" $5 "\":{POS:" $4 joined"},"
-        } else {
-          print "\t\"" $5 "\":{POS:" $4 joined"}"
-        }
+        print "    \"" $5 "\":{POS:" $4 joined"},"
+      } else {
+        print "    \"" $5 "\":{POS:" $4 joined"}"
+      }
 
 
       }
