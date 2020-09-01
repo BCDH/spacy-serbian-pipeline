@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from .stop_words import STOP_WORDS
 from .tokenizer_exceptions import TOKENIZER_EXCEPTIONS
 from .norm_exceptions import NORM_EXCEPTIONS
+from .tag_map import TAG_MAP
 from .lex_attrs import LEX_ATTRS
 from spacy.lang.tokenizer_exceptions import BASE_EXCEPTIONS
 from spacy.lang.norm_exceptions import BASE_NORMS
@@ -22,6 +23,21 @@ class SerbianDefaults(Language.Defaults):
     )
     tokenizer_exceptions = update_exc(BASE_EXCEPTIONS, TOKENIZER_EXCEPTIONS)
     stop_words = STOP_WORDS
+    tag_map = TAG_MAP
+    single_orth_variants = [
+        {"tags": ["$("], "variants": ["…", "..."]},
+        {"tags": ["$("], "variants": ["-", "—", "–", "--", "---", "——"]},
+    ]
+    paired_orth_variants = [
+        {
+            "tags": ["$("],
+            "variants": [("'", "'"), (",", "'"), ("‚", "‘"), ("›", "‹"), ("‹", "›")],
+        },
+        {
+            "tags": ["$("],
+            "variants": [("``", "''"), ('"', '"'), ("„", "“"), ("»", "«"), ("«", "»")],
+        },
+    ]
 
 
 class SerbianLanguage(Language):
