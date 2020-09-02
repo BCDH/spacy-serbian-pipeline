@@ -4,9 +4,11 @@ We're just starting with this project.
 
 ## How to use with Spacy?
 
-... 
+...
 
 ## Data files
+
+At the moment, the UD dataset which has been automatically converted to Cyrillic. This is temporary, while we're setting up our workflow. 
 
 ### Lemmatizer data
 
