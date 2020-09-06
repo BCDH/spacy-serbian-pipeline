@@ -25,10 +25,21 @@ BEGIN {
 
       }
 
+      # ignore UD tags (other than POS) for the time being
+      # because spacy v2 can't deal with arbitrary values
+      # and some of our values are not "acceptable"
+      # https://github.com/explosion/spaCy/issues/6019
+
+      # if (NR != lines) {
+      #   print "    \"" $5 "\":{POS:" $4 joined"},"
+      # } else {
+      #   print "    \"" $5 "\":{POS:" $4 joined"}"
+      # }
+      #
       if (NR != lines) {
-        print "    \"" $5 "\":{POS:" $4 joined"},"
+        print "    \"" $5 "\":{POS:" $4"},"
       } else {
-        print "    \"" $5 "\":{POS:" $4 joined"}"
+        print "    \"" $5 "\":{POS:" $4"}"
       }
 
 
