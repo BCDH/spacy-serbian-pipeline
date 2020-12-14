@@ -1,7 +1,7 @@
 # Install spacy in a virtual environtment
 
 #python3 -m venv env
-#source env/bin/activate.fish
+source env/bin/activate.fish
 #pip3 install --upgrade pip
 #pip3 install -U spacy
 #python3 -m spacy download en_core_web_sm
@@ -34,8 +34,7 @@ python3 setup.py develop
 #python3 -m spacy convert UD_Serbian_Cyrl-SET/sr_set-ud-dev.conllu  sr_training_data
 #python3 -m spacy convert UD_Serbian_Cyrl-SET/sr_set-ud-test.conllu  sr_training_data
 # # train
-rm -rf models
-mkdir models
+rm -rf models; and mkdir models
 python3 -m spacy train sr models/sr sr_training_data/sr_set-ud-train.json sr_training_data/sr_set-ud-dev.json -n 1 --version 0.0.1
 # # evaluate
 # python3 -m spacy evaluate models/sr/model-best sr_training_data/sr_set-ud-test.json
