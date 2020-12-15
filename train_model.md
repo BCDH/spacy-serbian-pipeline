@@ -11,3 +11,4 @@ Based on instructions [here](https://spacy.io/usage/training#basics)
 7. You can now train the model: `python -m spacy train config.cfg --paths.train ./sr-json/sr_set-ud-train.spacy --paths.dev ./sr-json/sr_set-ud-dev.spacy`
 
 #TODO train model with a custom language object and lookups data 
+#TODO learn more about token to vecor layer.  https://nightly.spacy.io/api/cli#pretrain When is this needed? TO what ends? 
