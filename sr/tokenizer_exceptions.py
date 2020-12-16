@@ -1,20 +1,20 @@
 # encoding: utf8
 from __future__ import unicode_literals
 
-from spacy.symbols import ORTH, LEMMA, NORM
+from spacy.symbols import ORTH, NORM, LEMMA
 
 # splittting
 # just testing
 
 _exc = {
     "нпр.": [
-        {ORTH: "н", LEMMA: "на", NORM: "на"},
-        {ORTH: "пр.", LEMMA: "пример", NORM: "пример"}
+        {ORTH: "н", NORM: "на"},
+        {ORTH: "пр.", NORM: "пример"}
     ],
     "итд.": [
-        {ORTH: "и", LEMMA: "и"},
-        {ORTH: "т", LEMMA: "тако", NORM: "тако"},
-        {ORTH: "д.", LEMMA: "даље", NORM: "даље"}
+        {ORTH: "и"},
+        {ORTH: "т", NORM: "тако"},
+        {ORTH: "д.", NORM: "даље"}
     ]
 }
 

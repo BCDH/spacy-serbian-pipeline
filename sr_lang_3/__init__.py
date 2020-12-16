@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from .stop_words import STOP_WORDS
 from .tokenizer_exceptions import TOKENIZER_EXCEPTIONS
-from .norm_exceptions import NORM_EXCEPTIONS
+#from .norm_exceptions import NORM_EXCEPTIONS
 from .tag_map import TAG_MAP
 from .lex_attrs import LEX_ATTRS
 from spacy.language import Language
@@ -19,9 +19,9 @@ class SerbianDefaults(Language.Defaults):
     lex_attr_getters.update(LEX_ATTRS)
     lex_attr_getters[LANG] = lambda text: "sr"
     # the following bit was giving me errors when building under 3.0
-    lex_attr_getters[NORM] = add_lookups(
-        Language.Defaults.lex_attr_getters[NORM], BASE_NORMS, NORM_EXCEPTIONS
-    )
+    #lex_attr_getters[NORM] = add_lookups(
+    #    Language.Defaults.lex_attr_getters[NORM], BASE_NORMS, NORM_EXCEPTIONS
+    #)
     tokenizer_exceptions = update_exc(BASE_EXCEPTIONS, TOKENIZER_EXCEPTIONS)
     stop_words = STOP_WORDS
     tag_map = TAG_MAP
