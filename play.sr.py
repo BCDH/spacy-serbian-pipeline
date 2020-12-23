@@ -3,6 +3,8 @@
 
 import spacy
 nlp = spacy.load("models/sr/model-best", disable=["ner"])
+#nlp.tokenizer.vocab.lookups.get_table('lemma_lookup').get('пије')
+
 #from spacy.util import get_lang_class
 # Serbian = get_lang_class("sr")
 # nlp = Serbian()

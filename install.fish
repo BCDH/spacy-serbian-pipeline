@@ -33,7 +33,8 @@ if test $_flag_r
     if test $_flag_2
       pip install -U spacy #this still installs version spacy 2.3
     else
-      pip install -U spacy-nightly[transformers] --pre
+      echo "Installing spacy-nightly"
+      pip install -U spacy-nightly[transformers,lookups] --pre
     end
     python3 -m spacy download en_core_web_sm
     python3 -m spacy download de_core_news_sm
@@ -41,29 +42,48 @@ if test $_flag_r
 end
 
 
+if $_flag_2
+  # Clone or pull the spacy lookups data
+  if command git clone https://github.com/explosion/spacy-lookups-data.git
+  else
+      cd spacy-lookups-data
+      git pull
+      cd ..
+  end
 
+  echo "Copying local sr_lemma_lookup.json to the spacy lookup data..."
+  cp sr_lookups_data/sr_lemma_lookup.json spacy-lookups-data/spacy_lookups_data/data/sr_lemma_lookup.json
+  cd spacy-lookups-data/
+  echo "Installing lookups data..."
+  # this next step may take a bit to complete
+  pip3 install -e .
+  cd ..
 
-# Clone or pull the spacy lookups data
-if command git clone https://github.com/explosion/spacy-lookups-data.git
 else
-    cd spacy-lookups-data
-    git pull
-    cd ..
+  # in spacy 3, we download the lookups data when installing spacy with [transformers,lookups]
+
+  # this is hard coded, but there has to be a better way to do it!
+
+  cd sr_lookups_data
+  gzip -k sr_lemma_lookup.json
+  mv ../env/lib/python3.8/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz ../env/lib/python3.8/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz.bak
+  mv sr_lemma_lookup.json.gz ../env/lib/python3.8/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz
+  cd ..
 end
 
-# Use our lookups instead the default one
-echo "Copying local sr_lemma_lookup.json to the spacy lookup data..."
-cp sr_lookups_data/sr_lemma_lookup.json spacy-lookups-data/spacy_lookups_data/data/sr_lemma_lookup.json
-cd spacy-lookups-data/
-echo "Installing lookups data..."
-# this next step may take a bit to complete
-pip3 install -e .
-cd ..
+
+
 
 # language data are different under 2 and 3
 # im doing this hacky nonsense because for the time being, i have to use both 2.3 and 3.0
 if test $_flag_3
-  mv sr/__init__.py sr/__init__.py.bak; and cp sr_lang_3/__init__.py sr/__init__.py; and mv sr/tokenizer_exceptions.py sr/tokenizer_exceptions.py.bak; and cp sr_lang_3/tokenizer_exceptions.py sr/tokenizer_exceptions.py
+  # mv sr/__init__.py sr/__init__.py.bak; and cp sr_lang_3/__init__.py sr/__init__.py; and mv sr/tokenizer_exceptions.py sr/tokenizer_exceptions.py.bak; and cp sr_lang_3/tokenizer_exceptions.py sr/tokenizer_exceptions.py
+  ln -sf sr_lang_3/__init__.py sr/__init__.py
+  ln -sf sr_lang_3/tokenizer_exceptions.py sr/tokenizer_exceptions.py
+else
+  ln -sf sr_lang_2/__init__.py sr/__init__.py
+  ln -sf sr_lang_2/tokenizer_exceptions.py sr/tokenizer_exceptions.py
+  ln -sf sr_lang_2/norm_exceptions.py sr/norm_exceptions.py
 end
 
 # Use Serbian pipeline
@@ -88,9 +108,12 @@ end
 
 
 # move back version 2 files
-if test $_flag_3
-  mv sr/__init__.py.bak sr/__init__.py; and mv sr/tokenizer_exceptions.py.bak sr/tokenizer_exceptions.py
-end
+# if test $_flag_3
+#   #mv sr/__init__.py.bak sr/__init__.py; and mv sr/tokenizer_exceptions.py.bak sr/tokenizer_exceptions.py
+# end
+#
+cd sr
+find . -maxdepth 1 -type l -ls -delete
 
 # # evaluate
 # python3 -m spacy evaluate models/sr/model-best sr_training_data/sr_set-ud-test.json
