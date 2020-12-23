@@ -32,4 +32,4 @@ class Serbian(Language):
     Defaults = SerbianDefaults
 
 
-__all__ = ["Serbian"]
+__all__ = ["SerbianLanguage"]
