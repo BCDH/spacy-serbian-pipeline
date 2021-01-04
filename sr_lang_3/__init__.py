@@ -27,7 +27,7 @@ class SerbianDefaults(Language.Defaults):
     tag_map = TAG_MAP
 
 
-class Serbian(Language):
+class SerbianLanguage(Language):
     lang = "sr"
     Defaults = SerbianDefaults
 
