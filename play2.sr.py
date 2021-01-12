@@ -2,27 +2,20 @@
 #!/usr/local/bin/python3
 
 import spacy
+import sys
+print (sys.path)
 
-nlp = spacy.load("models/sr/model-best", disable=["ner"])
-#nlp.add_pipe("lemmatizer", config={"mode": "lookup"})
-#nlp.initialize()
+nlp = spacy.load("models/sr/model-final", disable=["ner"])
 
-#print(lemmatizer.mode)  # 'rule'
-
-# print (nlp.tokenizer.vocab.lookups.get_table('lemma_lookup').get('пије'))
-
-from spacy.util import get_lang_class
-Serbian = get_lang_class("sr")
-nlp = Serbian()
-# print(len(nlp.vocab.lookups.get_table("lemma_lookup")))
-
-# doc = nlp('На отварању БЕМУС-а је требало да учествују нпр. Марта Аргерич и неколико ди-џејева.')
+doc = nlp('На отварању БЕМУС-а је требало да учествују нпр. Марта Аргерич и неколико ди-џејева.')
 
 #doc = nlp('На главним вестима ABC-ја гостују нпр. гђа Палавестра и др. На главним вестима Еј-Би-Сија гостује гђа Палавестра. На главним вестима АБЦ-ја гостује гђа Палавестра.')
 
 #Jekavian example
 
-doc = nlp('Овим правилником прописују се захтјеви које у погледу квалитета мора задовољити свјеже сирово млијеко при откупу, начин испитивања његовог квалитета, услови које морају испуњавати лабораторије за испитивање квалитета сировог млијека и критеријуми и начин утврђивања цијене.')
+#doc = nlp('Овим правилником прописују се захтјеви које у погледу квалитета мора задовољити свјеже сирово млијеко при откупу, начин испитивања његовог квалитета, услови које морају испуњавати лабораторије за испитивање квалитета сировог млијека и критеријуми и начин утврђивања цијене.')
+#
+#doc = nlp("Лидер радикалног покрета Самоопредељење Албин Курти могао би победом на ванредним косовским изборима 14. фебруара да озбиљно угрози наставак дијалога Београда и Приштине у Бриселу.")
 
 print(f"{'ТОКЕN':<20}{'POS':<8}{'TAG':<15}{'LEMMA':<15}{'NORM':<15}")
 print(f"{'¯¯¯¯¯':<20}{'¯¯¯':<8}{'¯¯¯':<15}{'¯¯¯¯¯':<15}{'¯¯¯¯':<15}")
@@ -39,6 +32,6 @@ for token in doc:
 # https://spacy.io/usage/adding-languages#tag-map
 # conversion fro UD to json doesn't pick up the POS field if there are more granual tags to deal with
 
-from spacy import displacy
-displacy.serve(doc, style="dep")
+#from spacy import displacy
+#displacy.serve(doc, style="dep")
 #displacy.serve(doc, style="ent") - we don't recognize entities at the moment;
