@@ -70,8 +70,8 @@ else
   # this is hard coded, but there has to be a better way to do it!
   cd sr_lookups_data
   gzip -k sr_lemma_lookup.json
-  mv ../env/lib/python3.8/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz ../env/lib/python3.8/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz.bak
-  mv sr_lemma_lookup.json.gz ../env/lib/python3.8/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz
+  mv ../env/lib/python3.7/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz ../env/lib/python3.7/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz.bak
+  mv sr_lemma_lookup.json.gz ../env/lib/python3.7/site-packages/spacy_lookups_data/data/sr_lemma_lookup.json.gz
   cd ..
 end
 
