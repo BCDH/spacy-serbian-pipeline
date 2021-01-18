@@ -12,7 +12,9 @@ from spacy.lang.norm_exceptions import BASE_NORMS
 from spacy.lookups import Lookups
 from spacy.attrs import LANG, NORM
 from spacy.util import update_exc, add_lookups
+from spacy.tokens import Doc
 
+import srsly
 
 class SerbianpDefaults(Language.Defaults):
     lex_attr_getters = dict(Language.Defaults.lex_attr_getters)
@@ -29,7 +31,31 @@ class SerbianpDefaults(Language.Defaults):
 
 class SerbianpLanguage(Language):
     lang = "srp"
-    Defaults = SerbianDefaults
+    Defaults = SerbianpDefaults
 
 
-__all__ = ["SerbianpLanguage"]
+class SerbianpLemmatizer:
+    def __call__(self, doc: Doc) -> Doc:
+        lookup = srsly.read_json('srp_lookups_data/srp_lemma_lookup.json')
+        for t in doc:
+            lemma = lookup.get(t.text, None)
+            if lemma:
+                t.lemma_ = lemma
+        return doc
+
+
+@Language.factory(
+    "srp_lemmatizer",
+    assigns=["token.lemma"],
+    default_config={},
+    default_score_weights={"lemma_acc": 1.0},
+)
+def make_lemmatizer(
+    nlp: Language,
+    name: str,
+):
+    return SerbianpLemmatizer()
+
+
+__all__ = ["SerbianpLanguage", "make_lemmatizer"]
+
