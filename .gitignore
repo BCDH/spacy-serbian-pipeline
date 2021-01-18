@@ -9,3 +9,4 @@ sr/__init__.py
 sr/tokenizer_exceptions.py
 sr/norm_exceptions.py
 .ipynb_checkpoints
+config.cfg
