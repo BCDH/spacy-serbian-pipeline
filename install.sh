@@ -1,3 +1,4 @@
+# this is David's attempt at a bash version of my fish install script for spacy 3. it doesn't work. 
 rm -rf env
 python3 -m venv env
 source env/bin/activate

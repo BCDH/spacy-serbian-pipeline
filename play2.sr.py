@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 #!/usr/local/bin/python3
-
-import spacy
-import sys
-print (sys.path)
+try:
+    import sys
+    import spacy
+except ImportError:
+    print("spaCy is probably installed inside a virtual environment. Make sure to activate it.")
+    sys.exit()
+#print (sys.path)
 
 nlp = spacy.load("models/sr/model-final", disable=["ner"])
 
 doc = nlp('На отварању БЕМУС-а је требало да учествују нпр. Марта Аргерич и неколико ди-џејева.')
 
-#doc = nlp('На главним вестима ABC-ја гостују нпр. гђа Палавестра и др. На главним вестима Еј-Би-Сија гостује гђа Палавестра. На главним вестима АБЦ-ја гостује гђа Палавестра.')
-
 #Jekavian example
 
 #doc = nlp('Овим правилником прописују се захтјеви које у погледу квалитета мора задовољити свјеже сирово млијеко при откупу, начин испитивања његовог квалитета, услови које морају испуњавати лабораторије за испитивање квалитета сировог млијека и критеријуми и начин утврђивања цијене.')
-#
-#doc = nlp("Лидер радикалног покрета Самоопредељење Албин Курти могао би победом на ванредним косовским изборима 14. фебруара да озбиљно угрози наставак дијалога Београда и Приштине у Бриселу.")
+
 
 print(f"{'ТОКЕN':<20}{'POS':<8}{'TAG':<15}{'LEMMA':<15}{'NORM':<15}")
 print(f"{'¯¯¯¯¯':<20}{'¯¯¯':<8}{'¯¯¯':<15}{'¯¯¯¯¯':<15}{'¯¯¯¯':<15}")
@@ -28,9 +28,6 @@ for token in doc:
     token_norm = token.norm_
     print(f"{token_orth:<20}{token_pos:<8}{token_tag:<15}{token_lemma:<15}{token_norm:<15}")
 
-# for token.pos_ we'll need a tag map
-# https://spacy.io/usage/adding-languages#tag-map
-# conversion fro UD to json doesn't pick up the POS field if there are more granual tags to deal with
 
 #from spacy import displacy
 #displacy.serve(doc, style="dep")
