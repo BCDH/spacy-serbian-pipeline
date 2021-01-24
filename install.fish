@@ -3,7 +3,7 @@
 # -r rebuild spacy from scratch
 # -u update serbian model only
 # -2 use spacy 2.3 build process
-# -3 use spacy 3.0 build process THIS IS BROKEN, DO NOT USE
+# -3 use spacy 3.0 build process: works, but doesn't produce a best model, only a last, and it spits out a bunch of errors
 
 argparse -x 'r,u' -x'2,3' 'r' 'u' 'v' 'd' 'e' '2' '3' -- $argv
 
@@ -13,13 +13,14 @@ end
 
 if begin; test -z $_flag_2; and test -z $_flag_3; end;
   set _flag_2 "-2"
-end 
+end
 
 # Install spacy from scratch
 # TODO: add a test so that you can't -u3 if the installed spacy is v2 and vice versa
 
 if test $_flag_r
   if test -d env
+    #deactivate # just in case
     echo "Removing previous installation..."
     rm -rf env
   end
@@ -30,7 +31,8 @@ if test $_flag_r
     pip install -U spacy #this still installs version spacy2.3
   else
     echo "Installing spacy-nightly"
-    pip install -U spacy-nightly[transformers,lookups] --pre
+    pip install -U spacy-nightly --pre
+    #[transformers,lookups]
   end
   # install english and german models if using -e and -dflags
   if test $_flag_d
@@ -44,12 +46,9 @@ end
 set site (python3 -c "import site; print(site.getsitepackages()[0])")
 
 if test $_flag_2
-  # set up symlinks with correct files for spacy 2
-  cd sr
-  ln -sf ../sr_lang_2/__init__.py __init__.py
-  ln -sf ../sr_lang_2/tokenizer_exceptions.py tokenizer_exceptions.py
-  ln -sf ../sr_lang_2/norm_exceptions.py norm_exceptions.py
-  cd ..
+  # not doing any symlinking anymore
+  # keeping spacy 2 stuff in sr
+  # and spacy 3 is in srp etc.
   # Clone or pull the spacy lookups data
   if command git clone https://github.com/explosion/spacy-lookups-data.git
   else
@@ -67,27 +66,13 @@ if test $_flag_2
   # this next step may take a bit to complete
   pip install -e .
   cd ..
+  # Use Serbian pipeline
+  echo "Set up Serbian pipeline..."
+  python3 setup.py develop
 
 else
-  # set up symlinks with correct files for spacy 3
-  cd sr
-  ln -sf ../sr_lang_3/__init__.py __init__.py
-  ln -sf ../sr_lang_3/tokenizer_exceptions.py tokenizer_exceptions.py
-  cd ..
-  # in spacy 3, we download the lookups data when installing spacy with [transformers,lookups]
-  # this is hard coded, but there has to be a better way to do it!
-  cd sr_lookups_data
-  gzip -k sr_lemma_lookup.json
-  # didn't test this yet -- trying not to
-  # hardcode python version number
-  mv sr_lemma_lookup.json.gz (echo $site)/spacy_lookups_data/data/srp_lemma_lookup.json.gz
-  cd ..
+  # no need to do anything here for spacy3
 end
-
-
-# Use Serbian pipeline
-echo "Set up Serbian pipeline..."
-python3 setup.py develop
 
 # git clone https://github.com/UniversalDependencies/UD_Serbian-SET.git
 # converted UD datasets to Cyrillic; this is just for starters, we plan to do our own training data

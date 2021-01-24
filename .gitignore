@@ -5,6 +5,3 @@ env
 spacy-lookups-data
 UD_Serbian-SET/
 models
-sr/__init__.py
-sr/tokenizer_exceptions.py
-sr/norm_exceptions.py
