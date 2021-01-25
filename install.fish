@@ -1,7 +1,7 @@
 #!/usr/local/bin/fish
 
 # -r rebuild spacy from scratch
-# -u update serbian model only
+# -u update serbian model only NOT YET
 # -2 use spacy 2.3 build process
 # -3 use spacy 3.0 build process: works, but doesn't produce a best model, only a last, and it spits out a bunch of errors
 
@@ -31,7 +31,7 @@ if test $_flag_r
     pip install -U spacy #this still installs version spacy2.3
   else
     echo "Installing spacy-nightly"
-    pip install -U spacy-nightly --pre
+    pip install -U spacy-nightly==3.0.0rc3 --pre
     #[transformers,lookups]
   end
   # install english and german models if using -e and -dflags
@@ -81,13 +81,21 @@ end
 #python3 -m spacy convert UD_Serbian_Cyrl-SET/sr_set-ud-dev.conllu  sr_training_data
 #python3 -m spacy convert UD_Serbian_Cyrl-SET/sr_set-ud-test.conllu  sr_training_data
 
-rm -rf models; and mkdir models
+
+if not test -d models
+    mkdir models
+else
+  rm -rf models
+  mkdir models
+end
+
 echo "Train model... "
 if test $_flag_2
   python3 -m spacy train sr models/sr sr_training_data/sr_set-ud-train.json sr_training_data/sr_set-ud-dev.json -n 1 -V 0.0.1
 else
   python3 -m spacy init fill-config base_config.cfg config.cfg
   python3 -m spacy train config.cfg --output models/srp
+  #python3 -m spacy ray train config.cfg --output models/srp --n-workers 2
 end
 
 
