@@ -3,7 +3,7 @@
 # -r rebuild spacy from scratch
 # -u update serbian model only NOT YET
 # -2 use spacy 2.3 build process
-# -3 use spacy 3.0 build process: works, but doesn't produce a best model, only a last, and it spits out a bunch of errors
+# -3 use spacy 3.0 build process: still work in progress
 
 argparse -x 'r,u' -x'2,3' 'r' 'u' 'v' 'd' 'e' '2' '3' -- $argv
 
@@ -20,7 +20,6 @@ end
 
 if test $_flag_r
   if test -d env
-    #deactivate # just in case
     echo "Removing previous installation..."
     rm -rf env
   end
@@ -28,7 +27,7 @@ if test $_flag_r
   source env/bin/activate.fish
   pip install -U pip setuptools wheel
   if test $_flag_2
-    pip install -U spacy #this still installs version spacy2.3
+    pip install -U spacy==2.3.5
   else
     echo "Installing spacy-nightly"
     pip install -U spacy-nightly==3.0.0rc3 --pre
