@@ -3,7 +3,7 @@
 # -r rebuild spacy from scratch
 # -u update serbian model only NOT YET
 # -2 use spacy 2.3 build process
-# -3 use spacy 3.0 build process: doesn't work in this branch. working on it in a separate brach with the new lemmatizer. 
+# -3 use spacy 3.0 build process: doesn't work in this branch. working on it in a separate brach with the new lemmatizer.
 
 argparse -x 'r,u' -x'2,3' 'r' 'u' 'v' 'd' 'e' '2' '3' -- $argv
 
@@ -29,8 +29,8 @@ if test $_flag_r
   if test $_flag_2
     pip install -U spacy==2.3.5
   else
-    echo "Installing spacy-nightly"
-    pip install -U spacy
+    echo "Installing spacy v3"
+    pip install -U spacy # this doesn't work
     #[transformers,lookups]
   end
   # install english and german models if using -e and -dflags
