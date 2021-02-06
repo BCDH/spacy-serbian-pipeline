@@ -3,7 +3,7 @@ corpus
 training
 packages
 metrics
-configs/config.cfg
+tagger_parser_lookups_srp/configs/config.cfg
 
 __pycache__
 *.egg-info
