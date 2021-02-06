@@ -43,7 +43,22 @@ test_examples:
     - python scripts/test_examples.py
   deps:
     - path: training/model-best
-      md5: 8f1e112884bc4b5a46d23038a8088faa
+      md5: 474bb940b438845c0bb7a44c69806977
   outs: []
+  spacy_version: 3.0.1
+  spacy_git_version: 91a3cab1c
+evaluate:
+  cmd: python -m spacy run evaluate
+  script:
+    - python -m spacy evaluate ./training/model-best ./corpus/UD_Serbian-SET/test.spacy
+      --output ./metrics/UD_Serbian-SET.json --gpu-id -1
+  deps:
+    - path: training/model-best
+      md5: 474bb940b438845c0bb7a44c69806977
+    - path: corpus/UD_Serbian-SET/test.spacy
+      md5: 4aba5fe557982e1ff5b9cad5cb526651
+  outs:
+    - path: metrics/UD_Serbian-SET.json
+      md5: 5df1ff230e4bd39b8a5e0d7a560bf394
   spacy_version: 3.0.1
   spacy_git_version: 91a3cab1c
