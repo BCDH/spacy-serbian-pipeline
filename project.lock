@@ -1,0 +1,49 @@
+install:
+  cmd: python -m spacy run install
+  script:
+    - pip install -e lang/srp/
+  deps:
+    - path: lang/srp/
+      md5: b1031d7f7708e13c00792fb59b20e7c8
+  outs: []
+  spacy_version: 3.0.1
+  spacy_git_version: 91a3cab1c
+convert:
+  cmd: python -m spacy run convert
+  script:
+    - mkdir -p corpus/UD_Serbian-SET
+    - python -m spacy convert assets/UD_Serbian-SET/sr_set-ud-train.conllu corpus/UD_Serbian-SET/
+      --converter conllu --n-sents 10 --merge-subtokens
+    - python -m spacy convert assets/UD_Serbian-SET/sr_set-ud-dev.conllu corpus/UD_Serbian-SET/
+      --converter conllu --n-sents 10 --merge-subtokens
+    - python -m spacy convert assets/UD_Serbian-SET/sr_set-ud-test.conllu corpus/UD_Serbian-SET/
+      --converter conllu --n-sents 10 --merge-subtokens
+    - mv corpus/UD_Serbian-SET/sr_set-ud-train.spacy corpus/UD_Serbian-SET/train.spacy
+    - mv corpus/UD_Serbian-SET/sr_set-ud-dev.spacy corpus/UD_Serbian-SET/dev.spacy
+    - mv corpus/UD_Serbian-SET/sr_set-ud-test.spacy corpus/UD_Serbian-SET/test.spacy
+  deps:
+    - path: assets/UD_Serbian-SET/sr_set-ud-train.conllu
+      md5: 6b051eb2e3ee517c64a0a458228682cd
+    - path: assets/UD_Serbian-SET/sr_set-ud-dev.conllu
+      md5: b2e996ac46e1cf233e580b186f896ae0
+    - path: assets/UD_Serbian-SET/sr_set-ud-test.conllu
+      md5: 21054ef8760f1a71c49a111a51261aa5
+  outs:
+    - path: corpus/UD_Serbian-SET/train.spacy
+      md5: 75fb1e8e9c1512b5de9eb03e1f3118c5
+    - path: corpus/UD_Serbian-SET/dev.spacy
+      md5: fafda247b700c06377648e9316917e16
+    - path: corpus/UD_Serbian-SET/test.spacy
+      md5: 4aba5fe557982e1ff5b9cad5cb526651
+  spacy_version: 3.0.1
+  spacy_git_version: 91a3cab1c
+test_examples:
+  cmd: python -m spacy run test_examples
+  script:
+    - python scripts/test_examples.py
+  deps:
+    - path: training/model-best
+      md5: 8f1e112884bc4b5a46d23038a8088faa
+  outs: []
+  spacy_version: 3.0.1
+  spacy_git_version: 91a3cab1c

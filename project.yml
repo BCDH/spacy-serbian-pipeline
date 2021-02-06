@@ -1,0 +1,108 @@
+title: "Alternative Serbian training pipeline with a lot of lemma lookups"
+description: "TODO"
+
+# Variables can be referenced across the project.yml using ${vars.var_name}
+vars:
+  base_config: "base_config"
+  lang: "srp"
+  treebank: "UD_Serbian-SET"
+  train_name: "sr_set-ud-train"
+  dev_name: "sr_set-ud-dev"
+  test_name: "sr_set-ud-test"
+  package_name: "ud_sr_set"
+  package_version: "0.0.0"
+  gpu: -1
+
+# These are the directories that the project needs. The project CLI will make
+# sure that they always exist.
+directories: ["assets", "corpus", "training", "metrics", "configs", "packages"]
+
+assets:
+  - dest: "assets/${vars.treebank}"
+    git:
+      repo: "https://github.com/UniversalDependencies/${vars.treebank}"
+      branch: "master"
+      path: ""
+  - dest: "assets/lookups"
+    git:
+      repo: "https://github.com/BCDH/spacy-serbian-pipeline"
+      branch: "master"
+      path: "srp_lookups_data"
+  - dest: "assets/tag_map"
+    git:
+      repo: "https://github.com/BCDH/spacy-serbian-pipeline"
+      branch: "master"
+      path: "srp"
+
+workflows:
+  all:
+    - convert
+    - install
+    - train
+    - evaluate
+    - test_examples
+
+commands:
+  - name: install
+    help: "Install serbian lang files as package with entry point srp"
+    script: 
+      - "pip install -e lang/srp/"
+    deps:
+      - "lang/srp/"
+
+  - name: convert
+    help: "Convert the data to spaCy's format"
+    # Make sure we specify the branch in the command string, so that the
+    # caching works correctly.
+    script:
+      - "mkdir -p corpus/${vars.treebank}"
+      - "python -m spacy convert assets/${vars.treebank}/${vars.train_name}.conllu corpus/${vars.treebank}/ --converter conllu --n-sents 10 --merge-subtokens"
+      - "python -m spacy convert assets/${vars.treebank}/${vars.dev_name}.conllu corpus/${vars.treebank}/ --converter conllu --n-sents 10 --merge-subtokens"
+      - "python -m spacy convert assets/${vars.treebank}/${vars.test_name}.conllu corpus/${vars.treebank}/ --converter conllu --n-sents 10 --merge-subtokens"
+      - "mv corpus/${vars.treebank}/${vars.train_name}.spacy corpus/${vars.treebank}/train.spacy"
+      - "mv corpus/${vars.treebank}/${vars.dev_name}.spacy corpus/${vars.treebank}/dev.spacy"
+      - "mv corpus/${vars.treebank}/${vars.test_name}.spacy corpus/${vars.treebank}/test.spacy"
+    deps:
+      - "assets/${vars.treebank}/${vars.train_name}.conllu"
+      - "assets/${vars.treebank}/${vars.dev_name}.conllu"
+      - "assets/${vars.treebank}/${vars.test_name}.conllu"
+    outputs:
+      - "corpus/${vars.treebank}/train.spacy"
+      - "corpus/${vars.treebank}/dev.spacy"
+      - "corpus/${vars.treebank}/test.spacy"
+
+  - name: train
+    help: "Train ${vars.treebank}"
+    script:
+      - "spacy init fill-config configs/${vars.base_config}.cfg configs/config.cfg"
+      - "spacy train configs/config.cfg --output training"
+    deps:
+      - "corpus/${vars.treebank}/train.spacy"
+      - "corpus/${vars.treebank}/dev.spacy"
+      - "configs/${vars.base_config}.cfg"
+    outputs:
+      - "training/${vars.treebank}/model-best"
+
+  - name: evaluate
+    help: "Evaluate on the test data and save the metrics"
+    script:
+      - "python -m spacy evaluate ./training/model-best ./corpus/${vars.treebank}/test.spacy --output ./metrics/${vars.treebank}.json --gpu-id ${vars.gpu}"
+    deps:
+      - "training/model-best"
+      - "corpus/${vars.treebank}/test.spacy"
+    outputs:
+      - "metrics/${vars.treebank}.json"
+
+  - name: test_examples
+    help: "test an example document and show model output"
+    script:
+      - "python scripts/test_examples.py"
+    deps:
+      - "training/model-best"
+
+  - name: clean
+    help: "Remove intermediate files"
+    script:
+      - "rm -rf training/*"
+      - "rm -rf metrics/*"
+      - "rm -rf corpus/*"
