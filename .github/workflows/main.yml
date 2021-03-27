@@ -25,12 +25,12 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: Update data
         shell: bash
-        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish echo "Update data" 
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} echo "Update data" 
         #run: ssh '$ { { secrets.USERNAME } }'@'$ { { secrets.SERVER } }' bash test.sh
       - name: Update data and retrain model 
         if: "contains(github.event.commits[0].message, '[retrain]')"
         shell: bash
-        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish echo "Update data and retrain model"
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} echo "Update data and retrain model"
 
 
       # Runs a single command using the runners shell
