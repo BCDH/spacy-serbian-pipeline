@@ -15,6 +15,7 @@ jobs:
   deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Install SSH Key
@@ -22,10 +23,14 @@ jobs:
         with: 
           key: ${{ secrets.SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      - name: Execute test script
+      - name: Update data
         shell: bash
-        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} bash test.sh
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish "Update data" 
         #run: ssh '$ { { secrets.USERNAME } }'@'$ { { secrets.SERVER } }' bash test.sh
+      - name: Update data and retrain model 
+        if: "contains(github.event.commits[0].message, '[retrain]')"
+        shell: bash
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish echo "Update data and retrain model"
 
 
       # Runs a single command using the runners shell
