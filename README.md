@@ -13,4 +13,4 @@ For testing training, we're using the UD dataset, which has been automatically c
 ### Lemmatizer data
 
 - data originates from Morpho-SLaWS (Tasovac, Rudan and Rudan 2015) and Transpoetika (Tasovac 2012)
-- currently includes both Ekavian and Jekavian forms, I may move Jekavians to the normalization function  
+- currently includes both Ekavian and Jekavian forms, I may move Jekavians to the normalization function    
