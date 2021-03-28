@@ -82,8 +82,10 @@ if test $_flag_u
   if test $_flag_2
     # Clone or pull the spacy lookups data
     if not test -d spacy-lookups-data
+      echo "Cloning spacy lookups data..."
       git clone https://github.com/explosion/spacy-lookups-data.git
     else
+      echo "Updating spacy lookup data"
       cd spacy-lookups-data
       git pull
       cd ..
