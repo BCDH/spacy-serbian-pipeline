@@ -6,7 +6,7 @@
 # -2 use spacy 2.3 build process
 # -3 use spacy 3.0 build process: doesn't work in this branch. working on it in a separate brach with the new lemmatizer.
 
-argparse -x 'r,u' -x'2,3' 'r' 'u' 'v' 'd' 'e' '2' '3', 't' -- $argv
+argparse -x 'r,u' -x'2,3' 'r' 'u' 'v' 'd' 'e' '2' '3' 't' -- $argv
 
 if begin; test -z $_flag_u; and test -z $_flag_r; end;
   set _flag_u "-u"
