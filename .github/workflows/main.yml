@@ -23,7 +23,7 @@ jobs:
       - name: Update data
         if: "!contains(github.event.commits[0].message, '[train]')"
         shell: bash
-        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/slovo-app/spacy-serbian-pipeline/test.fish
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/test.fish
         #run: ssh '$ { { secrets.USERNAME } }'@'$ { { secrets.SERVER } }' bash test.sh
       - name: Update data and retrain model 
         
