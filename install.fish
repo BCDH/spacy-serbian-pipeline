@@ -77,8 +77,7 @@ end
 set site (python3 -c "import site; print(site.getsitepackages()[0])")
 
 if test $_flag_u
-  # update datasets
-
+  echo "Updating Serbian datasets..."
   if test $_flag_2
     # Clone or pull the spacy lookups data
     if not test -d spacy-lookups-data
