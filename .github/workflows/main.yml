@@ -32,22 +32,4 @@ jobs:
         if: "contains(github.event.commits[0].message, '[train]')"
         shell: bash
         run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} "fish && cd slovo/spacy-serbian-pipeline && ./install.fish -t2"
-      - name: Send mail
-        if: always()
-        uses: dawidd6/action-send-mail@v2
-        with:
-          # mail server settings
-          server_address: smtp.mail.me.com
-          server_port: 587
-          # user credentials
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          # email subject
-          subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
-          # email body as text
-          body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
-          # comma-separated string, send email to
-          to: ${{ secrets.MAIL_TO_ADDRESS }}
-          # from email name
-          from: GitHub Notifications
 
