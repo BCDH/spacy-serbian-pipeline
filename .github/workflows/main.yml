@@ -23,14 +23,14 @@ jobs:
       - name: Rebuild spaCy from scratch
         if: "contains(github.event.commits[0].message, '[rebuild]')"
         shell: bash
-        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/test.fish
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/install.fish -r2
       - name: Update Serbian data
         if: "contains(github.event.commits[0].message, '[update]')"
         shell: bash
-        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/test.fish
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/install.fish -u2
       - name: Train Serbian model
         if: "contains(github.event.commits[0].message, '[train]')"
         shell: bash
-        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/test.fish
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/install.fish -t2
 
 
