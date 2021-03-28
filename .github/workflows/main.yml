@@ -20,23 +20,17 @@ jobs:
         with: 
           key: ${{ secrets.SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      - name: Update data
-        if: "!contains(github.event.commits[0].message, '[train]')"
+      - name: Rebuild spaCy from scratch
+        if: "contains(github.event.commits[0].message, '[rebuild]')"
         shell: bash
         run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/test.fish
-        #run: ssh '$ { { secrets.USERNAME } }'@'$ { { secrets.SERVER } }' bash test.sh
-      - name: Update data and retrain model 
-        
+      - name: Update Serbian data
+        if: "contains(github.event.commits[0].message, '[update]')"
         shell: bash
-        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} echo "Update data and retrain model"
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/test.fish
+      - name: Train Serbian model
+        if: "contains(github.event.commits[0].message, '[train]')"
+        shell: bash
+        run: ssh  ${{ secrets.USER }}@${{ secrets.SERVER }} fish slovo/spacy-serbian-pipeline/test.fish
 
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      #- name: Run a multi-line script
-        #run: |
-        #  echo Add other actions to build,
-        #  echo test, and deploy your project. 
