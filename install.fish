@@ -99,7 +99,7 @@ if test $_flag_u
       cd spacy-lookups-data
       # because we copied serbian files to spacy_lookups_data, some files may show up as modified (not staged for commit) as far as git is concerned
       set -l gitoutput (git status -s)
-      if test -z "$gitoutput"
+      if test "$gitoutput"
         git checkout data/sr_lexeme_norm.json #v2
         git checkout data/sr_lexeme_norm.json #v2, v3 may have additional files here
       end
