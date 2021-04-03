@@ -152,4 +152,3 @@ echo "Done"
 
 # # evaluate
 # python3 -m spacy evaluate models/sr/model-best sr_training_data/sr_set-ud-test.json
-# 
