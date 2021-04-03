@@ -6,6 +6,9 @@
 # -2 use spacy 2.3 build process
 # -3 use spacy 3.0 build process: doesn't work in this branch. working on it in a separate brach with the new lemmatizer.
 
+# Because the Serbian pipeline will be used together with the slovo-app,
+# we'll use this script also to install the necessary modules for django etc.
+
 argparse -x 'r,u' -x'2,3' 'r' 'u' 'v' 'd' 'e' '2' '3' 't' -- $argv
 
 if begin; test -z $_flag_u; and test -z $_flag_r; end;
@@ -40,14 +43,35 @@ end
 if test $_flag_r
   if test -d env
     echo "Removing previous installation..."
-    rm -rf env
+    #rm -rf env
+    # remove spacy and dependancies CHECK LATER IF v3 NEEDS SOMETHING ELSE
+    pip-autoremove spacy -y
+    pip-autoremove spacy_lookups_data -y
+    pip-autoremove sr
+    # because we copied serbian files to spacy_lookups_data, some files may show up as modified (not staged for commit) as far as git is concerned
+    if test -d spacy_lookups_data
+      cd spacy_lookups_data
+      if test (git status -s)
+        git checkout data/sr_lexeme_norm.json #v2
+        git checkout data/sr_lexeme_norm.json #v2, v3 may have additional files here
+      end
+    end
+  else
+    python3 -m venv env
   end
-  python3 -m venv env
   source env/bin/activate.fish
   pip install -U pip setuptools wheel
+  pip install pip-autoremove
+  ## slovo-app requirements
+  pip install Django==3.1.5
+  pip install requests==2.18.4
+  pip install beautifulsoup4==4.9.3
+  pip install PyYAML==5.4.1
+  ## end of slovo-app requirements
   if test $_flag_2
     pip install -U spacy==2.3.5
   else
+    #v3
     echo "Installing spacy-nightly"
     pip install -U spacy
     #[transformers,lookups]
@@ -58,19 +82,6 @@ if test $_flag_r
   end
   if test $_flag_e
     python3 -m spacy download en_core_web_sm
-  end
-  #if rebuilding from scratch, we want to download spacy-lookups-datasets
-  if test $_flag_2
-    # Clone or pull the spacy lookups data
-    if not test -d spacy-lookups-data
-      git clone https://github.com/explosion/spacy-lookups-data.git
-    else
-      cd spacy-lookups-data
-      git pull
-      cd ..
-    end
-  else
-    # version 3
   end
 end
 
@@ -86,10 +97,14 @@ if test $_flag_u
     else
       echo "Updating spacy lookup data"
       cd spacy-lookups-data
+      # because we copied serbian files to spacy_lookups_data, some files may show up as modified (not staged for commit) as far as git is concerned
+      if test (git status -s)
+        git checkout data/sr_lexeme_norm.json #v2
+        git checkout data/sr_lexeme_norm.json #v2, v3 may have additional files here
+      end
       git pull
       cd ..
     end
-
     echo "Copying local sr_lemma_lookup.json to the spacy lookup data..."
     # make sure you generate SLAWS normalization files to
     # sr_lookups_data/sr_lexeme_norm.json once we move to spacy3
@@ -104,9 +119,8 @@ if test $_flag_u
     echo "Set up Serbian pipeline..."
     python3 setup.py develop
   else
-    # no need to do anything here zfor spacy3
+    # no need to do anything here for spacy3
   end
-
 end
 
 # git clone https://github.com/UniversalDependencies/UD_Serbian-SET.git
