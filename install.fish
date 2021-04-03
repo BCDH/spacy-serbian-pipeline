@@ -47,7 +47,7 @@ if test $_flag_r
     # remove spacy and dependancies CHECK LATER IF v3 NEEDS SOMETHING ELSE
     pip-autoremove spacy -y
     pip-autoremove spacy_lookups_data -y
-    pip-autoremove sr
+    pip-autoremove sr -y
     # because we copied serbian files to spacy_lookups_data, some files may show up as modified (not staged for commit) as far as git is concerned
     if test -d spacy_lookups_data
       cd spacy_lookups_data
@@ -98,7 +98,8 @@ if test $_flag_u
       echo "Updating spacy lookup data"
       cd spacy-lookups-data
       # because we copied serbian files to spacy_lookups_data, some files may show up as modified (not staged for commit) as far as git is concerned
-      if test (git status -s)
+      set -l gitoutput (git status -s)
+      if test -z "$gitoutput"
         git checkout data/sr_lexeme_norm.json #v2
         git checkout data/sr_lexeme_norm.json #v2, v3 may have additional files here
       end
@@ -151,4 +152,4 @@ end
 echo "Done"
 
 # # evaluate
-# python3 -m spacy evaluate models/sr/model-best sr_training_data/sr_set-ud-test.json 
+# python3 -m spacy evaluate models/sr/model-best sr_training_data/sr_set-ud-test.json
