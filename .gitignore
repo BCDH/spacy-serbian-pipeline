@@ -4,4 +4,4 @@ __pycache__
 env
 spacy-lookups-data
 UD_Serbian-SET/
-models
+models/
