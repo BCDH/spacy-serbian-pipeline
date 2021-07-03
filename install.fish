@@ -1,4 +1,4 @@
-#!/usr/local/bin/fish
+#!/usr/bin/env fish
 
 # -r rebuild spacy from scratch with serbian data + train the model
 # -u update serbian data (no model training)
@@ -63,10 +63,11 @@ if test $_flag_r
   pip install -U pip setuptools wheel
   pip install pip-autoremove
   ## slovo-app requirements
-  pip install Django==3.1.5
-  pip install requests==2.18.4
-  pip install beautifulsoup4==4.9.3
-  pip install PyYAML==5.4.1
+  pip install -r ../slovo-app/requirements.txt
+  # pip install Django==3.1.5
+  # pip install requests==2.18.4
+  # pip install beautifulsoup4==4.9.3
+  # pip install PyYAML==5.4.1
   ## end of slovo-app requirements
   if test $_flag_2
     pip install -U spacy==2.3.5
@@ -101,7 +102,7 @@ if test $_flag_u
       set -l gitoutput (git status -s)
       if test "$gitoutput"
         git checkout data/sr_lexeme_norm.json #v2
-        git checkout data/sr_lexeme_norm.json #v2, v3 may have additional files here
+        git checkout data/sr_lemma_lookup.json #v2, v3 may have additional files here
       end
       git pull
       cd ..

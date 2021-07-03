@@ -10,7 +10,7 @@ except ImportError:
 
 nlp = spacy.load("models/sr/model-final", disable=["ner"])
 
-doc = nlp('На отварању БЕМУС-а је требало да учествују нпр. Марта Аргерич и неколико ди-џејева.')
+doc = nlp('Био је председник владе у том периоду.')
 
 #Jekavian example
 
