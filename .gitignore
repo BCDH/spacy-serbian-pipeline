@@ -1,7 +1,7 @@
 __pycache__
 *.egg-info/
 .DS_Store
-env
+env/
 spacy-lookups-data
 UD_Serbian-SET/
 models/
