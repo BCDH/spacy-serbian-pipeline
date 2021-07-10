@@ -3,7 +3,7 @@
 
 import spacy
 
-nlp = spacy.load("models/srp/model-best")
+nlp = spacy.load("training/model-best")
 #nlp = spacy.load("models/srp/model-last", disable=["ner"]) #we don't actually have a ner model yet
 
 #print("Pipeline:", nlp.pipe_names)

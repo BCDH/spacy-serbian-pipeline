@@ -3,9 +3,9 @@
 
 import spacy
 
-nlp = spacy.load("models/srp/model-last", disable=["ner"])
-nlp.add_pipe("lemmatizer", config={"mode": "lookup"})
-nlp.initialize()
+nlp = spacy.load("training/model-best")
+# nlp.add_pipe("lemmatizer", config={"mode": "lookup"})
+# nlp.initialize()
 
 #print(lemmatizer.mode)  # 'rule'
 

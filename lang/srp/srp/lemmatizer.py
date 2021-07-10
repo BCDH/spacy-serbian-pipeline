@@ -11,21 +11,25 @@ class SerbianLemmatizer():
         #, lemma_lookup_path, lexeme_norm_lookup_path
         #self.lexeme_norm_lookup = srsly.read_json(lexeme_norm_lookup_path)
         #self.lemma_lookup = srsly.read_json(lemma_lookup_path)
-        self.lemma_rules = srsly.read_json('srp_lookups_data/srp_lemma_rules.json')
-        self.lemma_lookup =  srsly.read_json('srp_lookups_data/srp_lemma_lookup.json')
+        #lookup_table = self.lookups.get_table("lemma_lookup", {})
+        self.lemma_rules = srsly.read_json('lang/assets/lookups/srp_lemma_rules.json')
+        self.lemma_lookup =  srsly.read_json('lang/assets/lookups/srp_lemma_lookup.json')
         self.non_declinables = ["PUNCT", "ADP", "CCONJ", "SCONJ", "ADV"]
         #lookup_table = self.lookups.get_table("lemma_lookup", {})
-        # the problem is that Spacy tags Еј-Би-Сија as PUNCT!  
+        # the problem is that Spacy tags Еј-Би-Сија as PUNCT!
 
     def __call__(self, doc: Doc) -> Doc:
         for t in doc:
             if t.pos_ in self.non_declinables:
                 t.lemma_ = t.text.lower() # for isntance, if a sentence starts with a preposition
             else:
-                t.lemma_ = self.lemmatize(t.text, t.norm_, t.pos_, self.lemma_lookup, self.lemma_rules)
+                t.lemma_ = self.lemmatize(t.text, t.norm_, t.pos_, t.tag_, self.lemma_lookup, self.lemma_rules)
         return doc
-    def lemmatize (self, token, norm, pos, lookup, rules):
+    def lemmatize (self, token, norm, pos, tag, lookup, rules):
         # rule-based lemmatization happens first
+        # not sure it's worth it, depends on what
+        # portion of the vcab i can cover with
+        # # rules
         for tokenend, lemmaend in rules.items():
             if token.endswith(tokenend):
                 lemma = token[: len(token) - len(tokenend)] + lemmaend
@@ -35,42 +39,22 @@ class SerbianLemmatizer():
         if lemma:
             if isinstance(lemma, str):
                 return lemma
-            elif isinstance(lemma, list):
-                # this will return first element in list
-                # this is totally random
-                # should be avoided for бирократ/бирократа doubles
-                return lemma[0]
+            #elif isinstance(lemma, list):
+            #     # this will return first element in list
+            #     # this is totally random
+            #     # should be avoided for бирократ/бирократа doubles
+            #     return "list"
             elif isinstance(lemma, dict):
-                # dict = two or more key:string or key:list items
-                # "коме": {
-                #   "PRON": [
-                #    "ко",
-                #    "који"
-                #   ],
-                #   "NOUN": [
-                #    "ком",
-                #    "кома"
-                #   ]
-                #  },
-                # "Продановим": {
-                #     "NOUN": "Проданов",
-                #     "ADJ": "Проданов"
-                #  },
-                #  "мора": {
-                #     "NOUN": [
-                #         "мора",
-                #         "море"
-                #     ],
-                #     "VERB": "морати"
-                # },
-
                 if pos in lemma.keys():
                     if isinstance(lemma[pos], str):
-                        return lemma[pos]
-                    elif isinstance(lemma[pos], list):
-                        return lemma[pos][1] +" !l" # this is random; we would need more info (gender etc. to resolve lists! except for бирократ/а which we may need to turn into one form in json data )
-                    else:
-                        return "nodict" #at the moment ther are no dicts at this level; we may have them if we decide to further distinguish lists by adding morphosyntactic tagsх
+                        return lemma[pos] + " (pos-based)"
+                #     elif isinstance(lemma[pos], list):
+                #         return lemma[pos][1] +" !l" # this is random; we would need more info (gender etc. to resolve lists! except for бирократ/а which we may need to turn into one form in json data )
+                    elif isinstance(lemma[pos], dict):
+                        if tag in lemma[pos].keys():
+                            return lemma[pos][tag]
+                        else:
+                            return "tagmismatch" #at the moment ther are no dicts at this level; we may have them if we decide to further distinguish lists by adding morphosyntactic tagsх
                 else:
                     if pos == "AUX":
                         if isinstance(lemma["VERB"], str):
@@ -112,7 +96,7 @@ class SerbianLemmatizer():
             #check normalized versions
             lemma = lookup.get(norm, None)
             if isinstance(lemma, str):
-                return lemma
+                return lemma + "(norm.)"
             elif isinstance(token, dict):
                 return "!normdict"
                 #token = list(token.values())[0]
@@ -120,3 +104,8 @@ class SerbianLemmatizer():
                 return ""
                 #return "!" + token
                 #token = "!" + token
+
+
+# TODO:
+# - јесам is AUX, not VERB
+# - ћу, ћеш also CH
