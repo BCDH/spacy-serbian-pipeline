@@ -38,12 +38,21 @@ class SerbianLemmatizer():
         lemma = lookup.get(token, None)
         if lemma:
             if isinstance(lemma, str):
+
                 return lemma
-            #elif isinstance(lemma, list):
-            #     # this will return first element in list
-            #     # this is totally random
-            #     # should be avoided for бирократ/бирократа doubles
-            #     return "list"
+            elif isinstance(lemma, list):
+                # this will return first element in list
+                # this is totally random
+                # should be avoided for бирократ/бирократа doubles
+                #џезиста, џезист
+                if pos == "NOUN":
+                    if len(list) == 2:
+                        if list[0].endswith("иста") and list[1].endswith("ист"):
+                            return list[0]
+                        return "list"
+                    return "list"
+                else:
+                    return "list"
             elif isinstance(lemma, dict):
                 if pos in lemma.keys():
                     if isinstance(lemma[pos], str):
@@ -55,35 +64,48 @@ class SerbianLemmatizer():
                             return lemma[pos][tag]
                         else:
                             return "tagmismatch" #at the moment ther are no dicts at this level; we may have them if we decide to further distinguish lists by adding morphosyntactic tagsх
+
                 else:
                     if pos == "AUX":
-                        if isinstance(lemma["VERB"], str):
-                            return lemma["VERB"]
-                        elif isinstance(lemma["VERB"], list):
-                            return lemma["VERB"][1] +" !l" #this is random
+                        if "VERB" in lemma:
+                            if isinstance(lemma["VERB"], str):
+                                return lemma["VERB"]
+                            elif isinstance(lemma["VERB"], list):
+                                return lemma["VERB"][1] +" !l"
+                            else:
+                                return "E873 VERB"
                         else:
-                            return "nodictAtThisLevel AUX"
+                            return "!noVerb!"
                     elif (pos == "SCONJ" or pos == "CCONJ"):
-                        if isinstance(lemma["CONJ"], str):
-                            return lemma["CONK"]
-                        elif isinstance(lemma["CONK"], list):
-                            return lemma["CONJ"][1] +" !l"#this is random
+                        if "CONJ" in lemma:
+                            if isinstance(lemma["CONJ"], str):
+                                return lemma["CONJ"]
+                            elif isinstance(lemma["CONJ"], list):
+                                return lemma["CONJ"][1] +" !l" #thiis random
+                            else:
+                                return "E874 CONJ"
                         else:
-                            return "nodictAtThisLevel CONJ"
+                            return "!noConj"
                     elif pos == "PROPN":
-                        if isinstance(lemma["NOUN"], str):
-                            return lemma["NOUN"]
-                        elif isinstance(lemma["NOUN"], list):
-                            return lemma["NOUN"][1] +" !l"#this is random
+                        if "NOUN" in lemma:
+                            if isinstance(lemma["NOUN"], str):
+                                return lemma["NOUN"]
+                            elif isinstance(lemma["NOUN"], list):
+                                return lemma["NOUN"][1] +" !l"#this is random
+                            else:
+                                return "E875 NOUN"
                         else:
-                            return "nodictAtThisLevel PROPN"
+                            return "!noNoun"
                     elif pos == "DET":
-                        if isinstance(lemma["PRON"], str):
-                            return lemma["PRON"]
-                        elif isinstance(lemma["PRON"], list):
-                            return lemma["PRON"][1] +" !l"#this is random
+                        if "PRON" in lemma:
+                            if isinstance(lemma["PRON"], str):
+                                return lemma["PRON"]
+                            elif isinstance(lemma["PRON"], list):
+                                return lemma["PRON"][1] +" !l"#this is random
+                            else:
+                                return "E876 PRON"
                         else:
-                            return "nodictAtThisLevel PRON"
+                            return "!noPron"
                     else:
                         # here we have tokens that exist in the lookup tables
                         # but not under the pos that spacy assigned to it. for instance if прилично was tagged as a NOUN but it's as ADJ and ADV in the lookups
